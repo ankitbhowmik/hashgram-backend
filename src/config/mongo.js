@@ -5,10 +5,12 @@ mongoose.connect(process.env.MONGODB_URI, {
     useCreateIndex: true,
     useFindAndModify:false,
     useNewUrlParser: true
-}).then(()=>{
-    console.log("mongo db connected");
-}).catch(err=>{
-    console.log("mongo err ", err);
-});
+})
+
+mongoose.connection.once("open", function(){
+    console.log("connection has been made");
+}).on("error", function(err){
+    console.log("error occured ", err);
+})
 
 module.exports = mongoose;
