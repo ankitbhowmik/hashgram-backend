@@ -7,17 +7,21 @@ const cookieParser = require("cookie-parser");
 require("./src/config/mongo");
 
 //middleware
-//handling CORS
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);
-    res.header('Access-Control-Allow-Headers', 'Content-Type, x-requested-with');
-    res.header('Access-Control-Allow-Credentials', true);
-    next();
-});
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(express.static("public"));
+
+// CORS HANDLER
+// prevent CORS problems
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+    res.header('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT ,DELETE');
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+})
+//CORS HANDLING ENDS
 
 const {jwtVerify} = require("./src/middleware/jwtAuth");
 
@@ -29,6 +33,7 @@ app.get("/", (req, res)=>{
 app.use("/user", require("./src/controller/user/user.route"));
 app.use("/auth", jwtVerify, require("./src/controller/following/following.route"));
 app.use("/auth", jwtVerify, require("./src/controller/follower/follower.route"));
+app.use("/", require("./src/controller/try/try.route"));
 
 //error page 404
 app.use((req, res, next)=>{

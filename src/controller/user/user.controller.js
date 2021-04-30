@@ -50,7 +50,6 @@ module.exports.deleteUser = async (req, res)=>{
 
 module.exports.verifyToken = (req, res)=>{
     const {authJwt} = req.cookies;
-    console.log("cookies are ", req.cookies);
     if(authJwt){
         jwt.verify( authJwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
             if(err){
@@ -59,7 +58,6 @@ module.exports.verifyToken = (req, res)=>{
             }
             try{
                 const thatUser = await User.findById(decodedToken.id);
-                console.log("that user ", thatUser);
                 res.json({auth: "success", data:thatUser});
             }catch(err){
                 res.json({auth: "fail", msg:"database err"});
