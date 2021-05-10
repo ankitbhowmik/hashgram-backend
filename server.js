@@ -30,7 +30,7 @@ app.get("/", (req, res)=>{
     res.send({name: "ankit", roll:12342, language:"javascript"});
 })
 
-app.use("/user", require("./src/controller/user/user.route"));
+app.use("/user", jwtVerify, require("./src/controller/user/user.route"));
 app.use("/auth", jwtVerify, require("./src/controller/following/following.route"));
 app.use("/auth", jwtVerify, require("./src/controller/follower/follower.route"));
 app.use("/", require("./src/controller/try/try.route"));

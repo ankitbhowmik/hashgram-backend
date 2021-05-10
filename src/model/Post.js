@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const mainPostSchema = new Schema({
     image: String,
-    likes: Number,
+    likes: [{userId: Schema.ObjectId}],
     comments: [{userId: Schema.ObjectId, cmnt: String}],
     caption: String,
 })

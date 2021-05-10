@@ -1,10 +1,8 @@
 const multer = require("multer");
 
-function sendDetail(fileName, location, allowed=['jpg', 'png', 'jpeg', 'image/JPG', 'PNG', 'JPEG']){
+function multerUpload(fileName, location, allowed=['jpg', 'png', 'jpeg', 'image/JPG', 'PNG', 'JPEG']){
     const storage = multer.diskStorage({
         destination:(req, file, cb)=>{
-            console.log("file is ", file);
-            console.log("cb is ", cb);
             cb(null, location);
         },
         filename: (req, file, cb)=>{
@@ -35,8 +33,4 @@ function sendDetail(fileName, location, allowed=['jpg', 'png', 'jpeg', 'image/JP
     return uploadFile;  
 }
 
-
-
-
-module.exports = sendDetail;
-
+module.exports = multerUpload;

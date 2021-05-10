@@ -9,7 +9,7 @@ const userSchema = new Schema({
         required: [true, "email is required"],
         unique: true,
     },
-     fullname:{
+    fullname:{
         type: String,
         required: [true, "fullname is required"]
     },
@@ -24,7 +24,14 @@ const userSchema = new Schema({
     profileImage: {
         type:String,
         default:""
-    }
+    },
+    bio: {
+        type:String,
+        default:""
+    },
+    posts:[{type: Schema.Types.ObjectId, ref:"post"}],
+    followers:[{type: Schema.Types.ObjectId, ref:"follower"}],
+    followings:[{type: Schema.Types.ObjectId, ref:"following"}],
 })
 
 userSchema.statics.login = async function(email, password) {

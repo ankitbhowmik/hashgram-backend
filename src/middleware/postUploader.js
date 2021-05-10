@@ -11,8 +11,8 @@ const storage = multer.diskStorage({
     }
 });
 
-// upto 5mb image is allowed
-const limits = {fileSize: 1024*1024*5};
+// upto 1mb image is allowed
+const limits = {fileSize: 1024*1024*1};
 
 const allowedType = ['png', 'jpg', 'jpeg'];
 const fileFilter = (req, file, cb)=>{

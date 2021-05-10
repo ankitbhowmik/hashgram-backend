@@ -67,3 +67,25 @@ module.exports.verifyToken = (req, res)=>{
         res.json({auth:"fail", msg:"no jwt found"})
     }
 }
+
+module.exports.uploadProfileImage = async (req, res) =>{
+    const {userId} = req.body;
+    const profileImage = `/uploads/profile/${req.file.filename}`;
+    try{
+        const thatUser = await User.findByIdAndUpdate(req.body.userId, {profileImage});
+        res.json({msg:"success", image:profileImage});
+    }catch(err){
+        res.status(302).json({msg:"fail"})
+    }
+}
+
+module.exports.editProfile = async (req, res) => {
+    const {fullname, email, bio} = req.body;
+    try{
+        const thatUser = await User.findByIdAndUpdate(req.userId, {fullname, email, bio});
+        res.json({msg: "success", fullname, email, bio})
+    }catch(err){
+        res.status(302).json({msg:"fail", error:err});
+    }
+}
+
