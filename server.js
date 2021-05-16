@@ -30,9 +30,14 @@ app.get("/", (req, res)=>{
     res.send({name: "ankit", roll:12342, language:"javascript"});
 })
 
-app.use("/user", jwtVerify, require("./src/controller/user/user.route"));
+//do not add jwtVerify in /user it will unable to go to login page if token are not present
+app.use("/user", require("./src/controller/user/user.route"));
+app.use("/profile", jwtVerify, require("./src/controller/profile/profile.route"));
 app.use("/auth", jwtVerify, require("./src/controller/following/following.route"));
 app.use("/auth", jwtVerify, require("./src/controller/follower/follower.route"));
+app.use("/post", jwtVerify, require("./src/controller/post/post.route"));
+
+//testing route will be delected when released
 app.use("/", require("./src/controller/try/try.route"));
 
 //error page 404

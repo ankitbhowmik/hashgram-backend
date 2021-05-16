@@ -3,15 +3,13 @@ const User = require("../../model/User");
 
 const {bcrypting} = require("../../helper/passwords");
 const {signupErr} = require("../../helper/signupErr");
-const {createCollections, deleteCollections} = require("../../helper/createCollections");
 
 module.exports.signup = async (req, res)=>{
-    let {email, fullname, username, password} = req.body;
+    let {email, fullname, password} = req.body;
     password = await bcrypting(password);
     try{
-        const newUser = await User.create({email, fullname, username, password});
+        const newUser = await User.create({email, fullname, password});
         res.json({msg:"success", doc:newUser._doc});
-        createCollections(newUser._doc._id);
     }catch(err){
         const error = signupErr(err);
         res.json({msg:"fail", error});
@@ -37,17 +35,6 @@ module.exports.logout = (req, res)=>{
     res.send({msg: "success"});
 }
 
-module.exports.deleteUser = async (req, res)=>{
-    const {id} = req.body;
-    try{
-        const theUser = await User.findByIdAndDelete(id);
-        res.send("user deleted with id "+id);
-        deleteCollections(id);
-    }catch(err){
-        res.send("no user found with that id")
-    }
-}
-
 module.exports.verifyToken = (req, res)=>{
     const {authJwt} = req.cookies;
     if(authJwt){
@@ -57,7 +44,10 @@ module.exports.verifyToken = (req, res)=>{
                 return;
             }
             try{
-                const thatUser = await User.findById(decodedToken.id);
+                const thatUser = await User.findById(decodedToken.id).select("email fullname profileImage bio posts followers followings");
+                thatUser._doc.followings = thatUser._doc.followings.length;
+                thatUser._doc.followers = thatUser._doc.followers.length;
+                thatUser._doc.posts = thatUser._doc.posts.length;
                 res.json({auth: "success", data:thatUser});
             }catch(err){
                 res.json({auth: "fail", msg:"database err"});
@@ -75,17 +65,6 @@ module.exports.uploadProfileImage = async (req, res) =>{
         const thatUser = await User.findByIdAndUpdate(req.body.userId, {profileImage});
         res.json({msg:"success", image:profileImage});
     }catch(err){
-        res.status(302).json({msg:"fail"})
+        res.status(302).json({msg:"fail"});
     }
 }
-
-module.exports.editProfile = async (req, res) => {
-    const {fullname, email, bio} = req.body;
-    try{
-        const thatUser = await User.findByIdAndUpdate(req.userId, {fullname, email, bio});
-        res.json({msg: "success", fullname, email, bio})
-    }catch(err){
-        res.status(302).json({msg:"fail", error:err});
-    }
-}
-
