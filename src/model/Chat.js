@@ -4,11 +4,14 @@ const Schema = mongoose.Schema;
 const mainChatSchema = new Schema({
     from: String,
     msg: String,
-    seen: Boolean
+    seen: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 const chatSchema = new Schema({
-    users: [],
+    members: [],
     chat: [mainChatSchema]
 })
 
