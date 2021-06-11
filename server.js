@@ -1,7 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer, { cors: { origin: [process.env.CLIENT_URL] } });
 const cookieParser = require("cookie-parser");
+
+const { jwtVerify } = require("./src/middleware/jwtAuth");
+const rootSocket = require("./src/config/rootSocket");
 
 //mongoose
 require("./src/config/mongo");
@@ -23,11 +28,13 @@ app.use(function (req, res, next) {
 })
 //CORS HANDLING ENDS
 
-const { jwtVerify } = require("./src/middleware/jwtAuth");
 
 //do not add jwtVerify in /user it will unable to go to login page if token are not present
 app.use("/user", require("./src/controller/user/user.route"));
 app.use("/api", jwtVerify, require("./src/routes/api.route"));
+
+//socket
+rootSocket(io);
 
 //error page 404
 app.use((req, res, next) => {
@@ -41,4 +48,4 @@ app.use((err, req, res, next) => {
 
 //listener
 const PORT = process.env.PORT || PORT;
-app.listen(PORT, () => { console.log("server running at port ", PORT) });
+httpServer.listen(PORT, () => { console.log("server running at port ", PORT) });
