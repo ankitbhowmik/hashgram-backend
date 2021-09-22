@@ -4,7 +4,8 @@
   "description": "social media project made by ankit bhowmik",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm install node server"
   },
   "keywords": [
     "social",
@@ -22,5 +23,8 @@
     "mongoose": "^6.0.7",
     "multer": "^1.4.2",
     "socket.io": "^4.1.2"
+  },
+  "engines": {
+    "node": "14.17.4"
   }
 }
