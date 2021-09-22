@@ -1,15 +1,10 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify:false,
-    useNewUrlParser: true
-})
+mongoose.connect(process.env.MONGODB_URI)
 
-mongoose.connection.once("open", function(){
+mongoose.connection.once("open", function () {
     console.log("connection has been made");
-}).on("error", function(err){
+}).on("error", function (err) {
     console.log("error occured ", err);
 })
 
