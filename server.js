@@ -13,6 +13,7 @@ const rootSocket = require("./src/config/rootSocket");
 require("./src/config/mongo");
 
 //middleware
+app.set('trust proxy', 1)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
