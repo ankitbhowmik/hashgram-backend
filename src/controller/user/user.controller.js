@@ -73,3 +73,17 @@ module.exports.searchUser = async (req, res) => {
         res.status(404).send([])
     }
 }
+
+module.exports.updateUser = async (req, res) => {
+    const { fullname, email, image } = req.body;
+    try {
+        const user = await User.findOne({ _id: req.userId })
+        user.email = email;
+        user.image = image;
+        user.fullname = fullname;
+        await user.save();
+        res.send({ success: true, data: user });
+    } catch (err) {
+        res.status(302).send({ success: false, error: "server error" });
+    }
+}
